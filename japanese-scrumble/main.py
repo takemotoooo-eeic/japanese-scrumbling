@@ -380,7 +380,7 @@ except KeyboardInterrupt:
 
 # Load the best saved model.
 with open(save_path, "rb") as f:
-    model = torch.load(f)
+    model = torch.load(f, weights_only=False)
 
 # Run on test data.
 if args.finetune:
