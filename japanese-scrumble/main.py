@@ -38,12 +38,6 @@ parser.add_argument(
     help="ID for experiment, corresponds to 'train_<id>.txt', 'valid_<id>.txt'.",
 )
 parser.add_argument(
-    "--dataset_name",
-    type=str,
-    required=True,
-    help="'wikipedia', 'childes', 'none'",
-)
-parser.add_argument(
     "--gpu",
     dest="gpu_id",
     type=int,
@@ -75,7 +69,6 @@ logger.info("Loading data")
 start = time.time()
 corpus = Corpus(
     base_path=pathlib.Path(args.data),
-    dataset_name=args.dataset_name,
     experiment_id=args.experiment_id,
 )
 logger.info("( %.2f )" % (time.time() - start))
@@ -361,7 +354,7 @@ try:
 
             # Return to the best saved model checkpoint
             with open(save_path, "rb") as f:
-                model = torch.load(f)
+                model = torch.load(f, weights_only=False)
 
         logger.info("-" * 89)
         epoch += 1

@@ -35,10 +35,7 @@ class Dictionary(object):
         except FileNotFoundError:
             logger.info("Vocab file not found, creating new vocab file...")
             self.create_vocab(
-                (
-                    dataset_path / "train.txt.original",
-                    retraining_base_path / f"train_{experiment_id}.txt",
-                )
+                [dataset_path / "train.txt.original"]
             )
             logger.info("Done creating new vocab file.")
             open(vocab_path, "w").write("\n".join([w for w in self.idx2word]))
@@ -60,31 +57,27 @@ class Dictionary(object):
                     words = line.split()
                     for word in words:
                         self.add_word(word)
+                        self.add_word("<unk>")
 
 
 class Corpus(object):
     def __init__(
         self,
         base_path: pathlib.Path,
-        dataset_name: str,
         experiment_id: str,
     ):
         logger.info(
-            f"Initializing corpus for dataset {dataset_name}, experiment {experiment_id}"
+            f"Initializing corpus for experiment {experiment_id}"
         )
 
-        dataset_path = base_path / dataset_name
+        dataset_path = base_path
         base_train_path = dataset_path / "train.txt.original"
-        extra_train_path = base_path / f"{experiment_id}__train.txt"
         base_valid_path = dataset_path / f"valid.txt.original"
-        extra_valid_path = base_path / f"{experiment_id}__valid.txt"
         base_test_path = dataset_path / "test.txt.original"
-        extra_test_path = base_path / f"{experiment_id}__test.txt"
 
         base_train_hash = _get_file_hash(base_train_path)
-        extra_train_hash = _get_file_hash(extra_train_path)
         train_dict_hash_file = (
-            base_path / f"train_dict_{base_train_hash}_{extra_train_hash}.cached"
+            base_path / f"train_dict_{base_train_hash}.cached"
         )
 
         if pathlib.Path(train_dict_hash_file).exists():
@@ -101,9 +94,9 @@ class Corpus(object):
                 pickle.dump(self.dictionary, f)
                 logger.info(f"Saved dictionary to {train_dict_hash_file}")
 
-        train_paths = [base_train_path, extra_train_path]
-        valid_paths = [base_valid_path, extra_valid_path]
-        test_paths = [base_test_path, extra_test_path]
+        train_paths = [base_train_path]
+        valid_paths = [base_valid_path]
+        test_paths = [base_test_path]
 
         self.train = tokenize(self.dictionary, train_paths)
         self.valid = tokenize(self.dictionary, valid_paths)
@@ -118,7 +111,8 @@ def _get_dictionary_hash(dictionary):
 
 def _tokenize_file(path, dictionary):
     file_hash = _get_file_hash(path)
-    grnn_data_path = path.parent.parent  # .../grnn_data/wikipedia/train.txt.original
+    grnn_data_path = path.parent  # .../grnn_data/wikipedia/train.txt.original
+    print(grnn_data_path)
     cache_path = grnn_data_path / f"tokenized_ids_{file_hash}.pt"
     if cache_path.exists():
         return torch.load(cache_path)
