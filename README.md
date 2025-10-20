@@ -79,25 +79,25 @@ mecab -Owakati data/wiki/wiki.txt > data/wiki/wiki_wakati.txt
 - `-Owakati`: Output tokenized format
 - Output file: `data/wiki/wiki_wakati.txt`
 
-#### 5. Convert to Hiragana
+#### 5. Convert to Katakana
 
-Convert tokenized text to hiragana readings:
+Convert tokenized text to katakana readings:
 
 ```bash
-# Convert to hiragana with MeCab
-mecab -Oyomi data/wiki/wiki_wakati.txt > data/wiki/wiki_hiragana.txt
+# Convert to katakana with MeCab
+mecab -Oyomi data/wiki/wiki_wakati.txt > data/wiki/wiki_katakana.txt
 ```
 
 - `-Oyomi`: Output in reading (katakana) format
-- Output file: `data/wiki/wiki_hiragana.txt`
+- Output file: `data/wiki/wiki_katakana.txt`
 
 #### 6. Split the Dataset
 
-Split the hiragana-converted text into training, validation, and test datasets:
+Split the katakana-converted text into training, validation, and test datasets:
 
 ```bash
 # Split data into train/valid/test
-uv run python recipes/split_data.py data/wiki/wiki_hiragana.txt data/wikipedia
+uv run python recipes/split_data.py data/wiki/wiki_katakana.txt data/wikipedia
 ```
 
 **Example output:**
@@ -137,25 +137,25 @@ This script provides the following features:
 - Optionally includes speaker information
 - Displays progress and summary statistics
 
-#### 3. Convert to Hiragana
+#### 3. Convert to Katakana
 
-Convert the tokenized text to hiragana readings:
+Convert the tokenized text to katakana readings:
 
 ```bash
-# Convert to hiragana with MeCab
-mecab -Oyomi data/childes/utterances.txt > data/childes/utterances_hiragana.txt
+# Convert to katakana with MeCab
+mecab -Oyomi data/childes/utterances.txt > data/childes/utterance_katakana.txt
 ```
 
 - `-Oyomi`: Output in reading (katakana) format
-- Output file: `data/childes/utterances_hiragana.txt`
+- Output file: `data/childes/utterance_katakana.txt`
 
 #### 4. Split the Dataset
 
-Split the hiragana-converted text into training, validation, and test datasets:
+Split the katakana-converted text into training, validation, and test datasets:
 
 ```bash
 # Split data into train/valid/test
-uv run python recipes/split_data.py data/childes/utterances_hiragana.txt data/CHILDES
+uv run python recipes/split_data.py data/childes/utterance_katakana.txt data/CHILDES
 ```
 
 **Example output:**
