@@ -13,7 +13,7 @@ import time
 
 import torch
 import torch.nn as nn
-from lib import RETRAINING_DATA_PATH
+from lib import TRAINING_DATA_PATH
 from loguru import logger
 from corpus import Corpus
 from utils import (
@@ -47,6 +47,20 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+
+# Configure file logging (save logs to a txt file as well as console)
+# logs will be stored under TRAINING_DATA_PATH/logs/<model>/<experiment_id>.log
+logs_dir = TRAINING_DATA_PATH / "logs" / f"{args.model}"
+logs_dir.mkdir(exist_ok=True, parents=True)
+log_file_path = logs_dir / f"{args.experiment_id}.log"
+logger.add(
+    str(log_file_path),
+    rotation="10 MB",  # rotate when file exceeds 10MB
+    encoding="utf-8",
+    enqueue=True,       # safe for multiprocessing
+    backtrace=True,
+    diagnose=False,
+)
 
 # Set the random seed manually for reproducibility.
 if torch.cuda.is_available():
@@ -302,9 +316,10 @@ logger.info(f"Running Transformer with args: {vars(args)}")
 args_id = kwargs_to_id(vars(args))
 logger.info(f"Transformer id: {args_id}")
 save_path = (
-    RETRAINING_DATA_PATH
+    TRAINING_DATA_PATH
     / "checkpoints"
-    / f"{args.experiment_id}__transformer__{args_id}.pt"
+    / f"{args.model}"
+    / f"{args.experiment_id}__{args.model}__{args_id}.pt"
 )
 save_path.parent.mkdir(exist_ok=True, parents=True)
 save_path = str(save_path)
