@@ -8,4 +8,5 @@ dependencies = [
     "hydra-core>=1.3.2",
     "loguru>=0.7.3",
     "torch>=2.8.0",
+    "wikiextractor>=3.0.6",
 ]

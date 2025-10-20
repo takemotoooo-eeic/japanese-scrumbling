@@ -62,6 +62,7 @@ dependencies = [
     { name = "hydra-core" },
     { name = "loguru" },
     { name = "torch" },
+    { name = "wikiextractor" },
 ]
 
 [package.metadata]
@@ -69,6 +70,7 @@ requires-dist = [
     { name = "hydra-core", specifier = ">=1.3.2" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "torch", specifier = ">=2.8.0" },
+    { name = "wikiextractor", specifier = ">=3.0.6" },
 ]
 
 [[package]]
@@ -522,6 +524,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
+]
+
+[[package]]
+name = "wikiextractor"
+version = "3.0.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/6c/21050e72c7e42f606689b1a4cbfbbf65c81e79addc69a9451de450e2c672/wikiextractor-3.0.6.tar.gz", hash = "sha256:7041ff57884c16409e9b911ccd0106c218b88cbceabb86dd1443637afa8284de", size = 43279, upload-time = "2021-10-14T12:35:00.888Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3f/37/b110fd8a87bab4120ff55061c508361bd1b012d789ff469af8fbd7cc3a38/wikiextractor-3.0.6-py3-none-any.whl", hash = "sha256:f4506990bf9c14e3cc92dc85a0a89554fef975cc1b28dcb9a4d31c73a8ef2133", size = 46403, upload-time = "2021-10-14T12:34:58.836Z" },
 ]
 
 [[package]]
