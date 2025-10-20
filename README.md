@@ -1,133 +1,167 @@
-# japanese-scrumbling
-言語情報学Ⅰ 期末プロジェクト
-
+# Japanese Scrambling
+Final Project for Linguistics I
 
 ## Environment Setup
 
-### MeCabのインストール
+### MeCab Installation
 
 ```bash
-# MeCabのインストール（Ubuntu/Debian）
+# Install MeCab (Ubuntu/Debian)
 sudo apt-get update
 sudo apt-get install mecab mecab-ipadic-utf8
 
-# または（macOS）
+# Or (macOS)
 # brew install mecab mecab-ipadic
 ```
 
-### Python依存関係のインストール
+### Python Dependencies Installation
 
 ```bash
-# 依存関係のインストール
+# Install dependencies
 uv sync
 ```
 
 ## Dataset Preparation
 
-### Wikipedia データの抽出
+### Wikipedia Data Extraction
 
-#### 1. ダンプファイルのダウンロードと解凍
+#### 1. Download and Extract Dump File
 
-日本語Wikipediaのダンプファイルをダウンロードして解凍：
+Download and extract the Japanese Wikipedia dump file:
 
 ```bash
-# ダウンロード
+# Download
 curl -O https://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2
 
-# 解凍
+# Extract
 bzip2 -d jawiki-latest-pages-articles.xml.bz2
 
-# data/wikiディレクトリに移動
+# Move to data/wiki directory
 mkdir data/wiki/
 mv jawiki-latest-pages-articles.xml data/wiki/
 ```
 
-#### 2. テキスト抽出
+#### 2. Text Extraction
 
-日本語Wikipediaのダンプファイルからテキストを抽出する場合：
+Extract text from the Japanese Wikipedia dump file:
 
 ```bash
 uv run python -m wikiextractor.WikiExtractor -o data/wiki/ data/wiki/jawiki-latest-pages-articles.xml
 ```
 
-- `-o data/wiki/`: 出力先ディレクトリを指定
-- 入力ファイル: `data/wiki/jawiki-latest-pages-articles.xml`
+- `-o data/wiki/`: Specify output directory
+- Input file: `data/wiki/jawiki-latest-pages-articles.xml`
 
-#### 3. テキストファイルの統合とクリーンアップ
+#### 3. Text File Integration and Cleanup
 
-抽出されたファイルを1つのテキストファイルに統合し、不要な行を削除：
+Integrate extracted files into a single text file and remove unnecessary lines:
 
 ```bash
-# 抽出されたwikiファイルを統合
+# Integrate extracted wiki files
 find data/wiki/ -name "wiki_*" | awk '{system("cat "$0" >> data/wiki/wiki.txt")}'
 
-# XMLタグのみの行を削除
+# Remove lines containing only XML tags
 sed -i '/^<[^>]*>$/d' data/wiki/wiki.txt
 
-# 空行を削除
+# Remove empty lines
 sed -i '/^$/d' data/wiki/wiki.txt
 ```
 
-#### 4. MeCabによる分ち書き
+#### 4. Tokenization with MeCab
 
-統合されたテキストファイルをMeCabで分ち書き（スペース区切り）に変換：
+Convert the integrated text file to space-separated tokens using MeCab:
 
 ```bash
-# MeCabで分ち書き（スペース区切り）
+# Tokenize with MeCab (space-separated)
 mecab -Owakati data/wiki/wiki.txt > data/wiki/wiki_wakati.txt
 ```
 
-- `-Owakati`: 分ち書き形式で出力
-- 出力ファイル: `data/wiki/wiki_wakati.txt`
+- `-Owakati`: Output in tokenized format
+- Output file: `data/wiki/wiki_wakati.txt`
 
-#### 5. ひらがな変換
+#### 5. Hiragana Conversion
 
-分ち書きされたテキストをひらがなに変換：
+Convert tokenized text to hiragana:
 
 ```bash
-# MeCabでひらがな変換
+# Convert to hiragana with MeCab
 mecab -Oyomi data/wiki/wiki_wakati.txt > data/wiki/wiki_hiragana.txt
 ```
 
-- `-Oyomi`: 読み仮名（カタカナ）形式で出力
-- `sed 'y/ア-ン/あ-ん/'`: カタカナをひらがなに変換
-- 出力ファイル: `data/wiki/wiki_hiragana.txt`
+- `-Oyomi`: Output in reading (katakana) format
+- Output file: `data/wiki/wiki_hiragana.txt`
 
-#### 6. データ分割
+#### 6. Data Splitting
 
-ひらがな変換されたテキストを訓練・検証・テストデータに分割：
+Split the hiragana-converted text into training, validation, and test datasets:
 
 ```bash
-# データをtrain/valid/testに分割
+# Split data into train/valid/test
 uv run python recipes/split_data.py data/wiki/wiki_hiragana.txt data/wikipedia
 ```
 
-**実行結果の例：**
+**Example output:**
 ```
-入力ファイル: data/wiki/wiki_hiragana.txt
-出力ディレクトリ: data/wikipedia
-分割比率 - Train: 80.0%, Valid: 10.0%, Test: 10.0%
-ファイルを読み込み中...
-総行数: 1,234,567
-データをシャッフル中...
-分割点 - Train: 987,653, Valid: 1,111,110, Test: 1,234,567
-訓練データを書き込み中...
-検証データを書き込み中...
-テストデータを書き込み中...
-
-分割完了!
-訓練データ: 987,653 行 (80.0%)
-検証データ: 123,457 行 (10.0%)
-テストデータ: 123,457 行 (10.0%)
-
-出力ファイル:
+Output files:
   - data/wikipedia/train.txt.original
   - data/wikipedia/valid.txt.original
   - data/wikipedia/test.txt.original
 ```
 
-このスクリプトは以下の機能を提供します：
-- デフォルトで80:10:10の比率でデータを分割
-- ランダムシード（デフォルト: 42）で再現可能な分割
-- カスタム分割比率の指定が可能
-- 進捗状況と統計情報の表示
+### CHILDES Data Processing
+
+#### 1. Download and Extract CHILDES Data
+
+Download and extract CHILDES data to `data/childes` directory from the following sources:
+
+- [Hamasaki](https://talkbank.org/childes/access/Japanese/Hamasaki.html)
+- [NINJAL-Okubo](https://talkbank.org/childes/access/Japanese/NINJAL-Okubo.html)
+- [Noji](https://talkbank.org/childes/access/Japanese/Noji.html)
+- [Ogawa](https://talkbank.org/childes/access/Japanese/Ogawa.html)
+- [Okayama](https://talkbank.org/childes/access/Japanese/Okayama.html)
+- [Yokoyama](https://talkbank.org/childes/access/Japanese/Yokoyama.html)
+
+#### 2. Utterance Extraction
+
+Extract only utterances from CHILDES data and combine them into a single text file:
+
+```bash
+# Extract utterances from CHILDES data
+uv run python recipes/extract_childes_utterances.py data/childes data/childes_utterances.txt
+```
+
+This script provides the following features:
+- Recursively search all `.cha` files
+- Extract utterances from lines starting with `*`
+- Clean special characters and symbols
+- Optional speaker information inclusion
+- Display progress and statistics
+
+#### 3. Hiragana Conversion
+
+Convert tokenized text to hiragana:
+
+```bash
+# Convert to hiragana with MeCab
+mecab -Oyomi data/childes/utterances.txt > data/childes/utterances_hiragana.txt
+```
+
+- `-Oyomi`: Output in reading (katakana) format
+- Output file: `data/childes/utterances_hiragana.txt`
+
+#### 4. Data Splitting
+
+Split the hiragana-converted text into training, validation, and test datasets:
+
+```bash
+# Split data into train/valid/test
+uv run python recipes/split_data.py data/childes/utterances_hiragana.txt data/CHILDES
+```
+
+**Example output:**
+```
+Output files:
+  - data/CHILDES/train.txt.original
+  - data/CHILDES/valid.txt.original
+  - data/CHILDES/test.txt.original
+```

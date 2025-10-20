@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-データ分割スクリプト
-wiki_hiragana.txtをtrain/valid/testに分割する
+Data splitting script
+Split wiki_hiragana.txt into train/valid/test
 """
 
 import pathlib
@@ -18,82 +18,74 @@ def split_data(
     seed: int = 42
 ) -> None:
     """
-    データファイルをtrain/valid/testに分割する
+    Split data file into train/valid/test
     
     Args:
-        input_file: 入力ファイルパス
-        output_dir: 出力ディレクトリ
-        train_ratio: 訓練データの割合
-        valid_ratio: 検証データの割合
-        test_ratio: テストデータの割合
-        seed: ランダムシード
+        input_file: Input file path
+        output_dir: Output directory
+        train_ratio: Training data ratio
+        valid_ratio: Validation data ratio
+        test_ratio: Test data ratio
+        seed: Random seed
     """
     
-    # 比率の検証
     if abs(train_ratio + valid_ratio + test_ratio - 1.0) > 1e-6:
-        raise ValueError("train_ratio + valid_ratio + test_ratio は 1.0 である必要があります")
+        raise ValueError("train_ratio + valid_ratio + test_ratio must equal 1.0")
     
-    # 出力ディレクトリの作成
     output_path = pathlib.Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
-    # ランダムシードの設定
     random.seed(seed)
     
-    print(f"入力ファイル: {input_file}")
-    print(f"出力ディレクトリ: {output_dir}")
-    print(f"分割比率 - Train: {train_ratio:.1%}, Valid: {valid_ratio:.1%}, Test: {test_ratio:.1%}")
+    print(f"Input file: {input_file}")
+    print(f"Output directory: {output_dir}")
+    print(f"Split ratios - Train: {train_ratio:.1%}, Valid: {valid_ratio:.1%}, Test: {test_ratio:.1%}")
     
-    # ファイルを読み込んで行をシャッフル
-    print("ファイルを読み込み中...")
+    print("Loading file...")
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as f:
         lines = f.readlines()
     
     total_lines = len(lines)
-    print(f"総行数: {total_lines:,}")
+    print(f"Total lines: {total_lines:,}")
     
-    # 行をシャッフル
-    print("データをシャッフル中...")
+    print("Shuffling data...")
     random.shuffle(lines)
     
-    # 分割点を計算
     train_end = int(total_lines * train_ratio)
     valid_end = int(total_lines * (train_ratio + valid_ratio))
     
-    print(f"分割点 - Train: {train_end:,}, Valid: {valid_end:,}, Test: {total_lines:,}")
+    print(f"Split points - Train: {train_end:,}, Valid: {valid_end:,}, Test: {total_lines:,}")
     
-    # ファイルに書き込み
-    print("訓練データを書き込み中...")
+    print("Writing training data...")
     with open(output_path / "train.txt.original", 'w', encoding='utf-8') as f:
         f.writelines(lines[:train_end])
     
-    print("検証データを書き込み中...")
+    print("Writing validation data...")
     with open(output_path / "valid.txt.original", 'w', encoding='utf-8') as f:
         f.writelines(lines[train_end:valid_end])
     
-    print("テストデータを書き込み中...")
+    print("Writing test data...")
     with open(output_path / "test.txt.original", 'w', encoding='utf-8') as f:
         f.writelines(lines[valid_end:])
     
-    # 結果の表示
-    print("\n分割完了!")
-    print(f"訓練データ: {train_end:,} 行 ({train_end/total_lines:.1%})")
-    print(f"検証データ: {valid_end - train_end:,} 行 ({(valid_end - train_end)/total_lines:.1%})")
-    print(f"テストデータ: {total_lines - valid_end:,} 行 ({(total_lines - valid_end)/total_lines:.1%})")
+    print("\nSplit completed!")
+    print(f"Training data: {train_end:,} lines ({train_end/total_lines:.1%})")
+    print(f"Validation data: {valid_end - train_end:,} lines ({(valid_end - train_end)/total_lines:.1%})")
+    print(f"Test data: {total_lines - valid_end:,} lines ({(total_lines - valid_end)/total_lines:.1%})")
     
-    print(f"\n出力ファイル:")
+    print(f"\nOutput files:")
     print(f"  - {output_path / 'train.txt.original'}")
     print(f"  - {output_path / 'valid.txt.original'}")
     print(f"  - {output_path / 'test.txt.original'}")
 
 def main():
-    parser = argparse.ArgumentParser(description="データファイルをtrain/valid/testに分割")
-    parser.add_argument("input_file", help="入力ファイルパス")
-    parser.add_argument("output_dir", help="出力ディレクトリ")
-    parser.add_argument("--train-ratio", type=float, default=0.8, help="訓練データの割合 (デフォルト: 0.8)")
-    parser.add_argument("--valid-ratio", type=float, default=0.1, help="検証データの割合 (デフォルト: 0.1)")
-    parser.add_argument("--test-ratio", type=float, default=0.1, help="テストデータの割合 (デフォルト: 0.1)")
-    parser.add_argument("--seed", type=int, default=42, help="ランダムシード (デフォルト: 42)")
+    parser = argparse.ArgumentParser(description="Split data file into train/valid/test")
+    parser.add_argument("input_file", help="Input file path")
+    parser.add_argument("output_dir", help="Output directory")
+    parser.add_argument("--train-ratio", type=float, default=0.8, help="Training data ratio (default: 0.8)")
+    parser.add_argument("--valid-ratio", type=float, default=0.1, help="Validation data ratio (default: 0.1)")
+    parser.add_argument("--test-ratio", type=float, default=0.1, help="Test data ratio (default: 0.1)")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
     
     args = parser.parse_args()
     
