@@ -1,0 +1,25 @@
+2025-10-20 19:53:56.102 | INFO     | __main__:<module>:76 - Using GPU ID 0
+2025-10-20 19:53:56.212 | INFO     | __main__:<module>:82 - Loading data
+2025-10-20 19:53:56.212 | INFO     | corpus:__init__:69 - Initializing corpus for experiment wiki_exp1
+2025-10-20 19:53:58.939 | INFO     | corpus:__init__:36 - Vocab file not found, creating new vocab file...
+2025-10-20 19:56:38.223 | INFO     | corpus:__init__:40 - Done creating new vocab file.
+2025-10-20 19:56:39.453 | INFO     | corpus:__init__:95 - Saved dictionary to data/wikipedia/train_dict_42ccc5f4.cached
+2025-10-20 19:56:39.453 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/train.txt.original...
+2025-10-20 20:12:08.113 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/valid.txt.original...
+2025-10-20 20:14:04.875 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/test.txt.original...
+2025-10-20 20:16:00.787 | INFO     | corpus:__init__:104 - Done tokenizing.
+2025-10-20 20:16:00.788 | INFO     | __main__:<module>:88 - ( 1324.58 )
+2025-10-20 20:16:00.788 | INFO     | __main__:<module>:90 - Vocab size %d
+2025-10-20 20:16:00.788 | INFO     | __main__:<module>:93 - Batchifying..
+2025-10-21 18:09:45.398 | INFO     | __main__:<module>:76 - Using GPU ID 0
+2025-10-21 18:09:45.509 | INFO     | __main__:<module>:82 - Loading data
+2025-10-21 18:09:45.509 | INFO     | corpus:__init__:69 - Initializing corpus for experiment wiki_exp1
+2025-10-21 18:09:49.475 | INFO     | corpus:__init__:86 - Loaded dictionary from data/wikipedia/train_dict_42ccc5f4.cached
+2025-10-21 18:09:49.475 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/train.txt.original...
+2025-10-21 18:09:54.513 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/valid.txt.original...
+2025-10-21 18:09:55.069 | INFO     | corpus:tokenize:146 - Tokenizing data/wikipedia/test.txt.original...
+2025-10-21 18:09:55.646 | INFO     | corpus:__init__:104 - Done tokenizing.
+2025-10-21 18:09:55.647 | INFO     | __main__:<module>:88 - ( 10.14 )
+2025-10-21 18:09:55.647 | INFO     | __main__:<module>:90 - Vocab size %d
+2025-10-21 18:09:55.647 | INFO     | __main__:<module>:93 - Batchifying..
+2025-10-21 18:09:57.357 | INFO     | __main__:<module>:128 - Building the model

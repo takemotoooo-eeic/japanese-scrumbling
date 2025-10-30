@@ -213,6 +213,8 @@ def finetune():
     # Loop over training set in chunks of decl quest pairs
     for batch, b in enumerate(train_data):
         data, targets = b[:, :-1].T, b[:, 1:].T.flatten()
+        data = data.cuda()
+        targets = targets.cuda()
 
         model.zero_grad()
 
@@ -269,6 +271,8 @@ def train():
     for batch, i in enumerate(range(0, train_data.size(0) - 1, args.bptt)):
         data, targets = get_batch(train_data, i, args.bptt)
 
+        data = data.cuda()
+        targets = targets.cuda()
         model.zero_grad()
 
         if args.model == "Transformer":

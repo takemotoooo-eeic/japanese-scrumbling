@@ -55,11 +55,11 @@ lm_parser.add_argument(
     help="number of epochs without improvement to do before stopping",
 )
 lm_parser.add_argument(
-    "--batch_size", type=int, default=20, metavar="N", help="batch size"
+    "--batch_size", type=int, default=10, metavar="N", help="batch size"
 )
 
 lm_parser.add_argument(
-    "--bptt", type=int, default=35, help="sequence length to backpropagate through"
+    "--bptt", type=int, default=20, help="sequence length to backpropagate through"
 )
 
 
