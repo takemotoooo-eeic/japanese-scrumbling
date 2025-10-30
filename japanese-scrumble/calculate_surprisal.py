@@ -21,7 +21,7 @@ def main():
     print(f"🔸 Sentence 2: {sentence2}\n")
 
     # サプライザルを計算
-    surprisals = get_surprisals_for_strings((sentence1, sentence2), model_name=model_name)
+    surprisals = get_surprisals_for_strings((sentence1, sentence2), model=model_name)
 
     # 結果の出力
     for i, sent in enumerate(surprisals.sentences):
